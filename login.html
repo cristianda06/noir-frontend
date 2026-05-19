@@ -76,10 +76,9 @@
             const mensaje = document.getElementById('loginMensaje');
 
             try {
-                const res = await fetch('http://localhost:3000/login', {
+                const res = await fetch('https://noir-backend-t92y.onrender.com/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    // IMPORTANTE: Enviamos la clave "email" para que el Backend la encuentre
                     body: JSON.stringify({ email: emailInput, password: passwordInput })
                 });
 
@@ -116,7 +115,7 @@
             const errorTxt = document.getElementById('adminModalError');
 
             try {
-                const res = await fetch('http://localhost:3000/login', {
+                const res = await fetch('https://noir-backend-t92y.onrender.com/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: email, password: password })
