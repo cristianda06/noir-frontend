@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | NOIR</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #f4f4f2;
+            --white: #ffffff;
+            --black: #111111;
+            --gray-dark: #444444;
+            --gray-mid: #888888;
+            --gray-light: #cccccc;
+            --gray-subtle: #e8e8e6;
+            --border: #d4d4d0;
+            --sidebar-w: 220px;
+            --error: #b00020;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--black);
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: var(--white);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0; left: 0; bottom: 0;
+            z-index: 100;
+        }
+
+        .sidebar-brand {
+            padding: 2rem 1.5rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: 8px;
+            color: var(--black);
+            display: block;
+        }
+
+        .sidebar-role {
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--gray-mid);
+            text-transform: uppercase;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1rem 0;
+        }
+
+        .nav-section {
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--gray-light);
+            text-transform: uppercase;
+            padding: 1rem 1.5rem 0.5rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 1.5rem;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--gray-mid);
+            border-left: 2px solid transparent;
+            transition: all 0.15s;
+            text-decoration: none;
+        }
+
+        .nav-item svg { width: 15px; height: 15px; flex-shrink: 0; stroke: currentColor; }
+
+        .nav-item:hover { color: var(--black); background: var(--gray-subtle); }
+
+        .nav-item.active {
+            color: var(--black);
+            border-left-color: var(--black);
+            background: var(--gray-subtle);
+            font-weight: 500;
+        }
+
+        .sidebar-footer {
+            padding: 1.25rem 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn-logout {
+            width: 100%;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 9px;
+            font-size: 11px;
+            font-family: 'DM Sans', sans-serif;
+            color: var(--gray-mid);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-logout:hover { border-color: var(--error); color: var(--error); }
+
+        /* ── MAIN ── */
+        .main {
+            margin-left: var(--sidebar-w);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 2rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--white);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .topbar-title {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--black);
+        }
+
+        .topbar-admin {
+            font-size: 12px;
+            color: var(--gray-mid);
+        }
+
+        .content { padding: 2rem; flex: 1; }
+
+        /* ── SECTIONS ── */
+        .section { display: none; }
+        .section.active { display: block; }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--black);
+        }
+
+        /* ── BOTONES ── */
+        .btn-primary {
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            border-radius: 2px;
+            padding: 9px 20px;
+            font-size: 11px;
+            font-weight: 500;
+            font-family: 'DM Sans', sans-serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn-primary:hover { background: var(--gray-dark); }
+        .btn-primary:active { transform: scale(0.98); }
+
+        .btn-sm {
+            padding: 4px 12px;
+            font-size: 11px;
+            border-radius: 2px;
+            cursor: pointer;
+            border: 1px solid;
+            font-family: 'DM Sans', sans-serif;
+            letter-spacing: 0.5px;
+            transition: opacity 0.15s;
+        }
+
+        .btn-sm:hover { opacity: 0.75; }
+
+        .btn-edit {
+            background: var(--gray-subtle);
+            color: var(--gray-dark);
+            border-color: var(--border);
+        }
+
+        .btn-del {
+            background: #fff0f0;
+            color: var(--error);
+            border-color: #f5c0c0;
+        }
+
+        /* ── TABLA ── */
+        .tbl-wrap {
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            background: var(--white);
+        }
+
+        .tbl {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            table-layout: fixed;
+        }
+
+        .tbl th {
+            text-align: left;
+            padding: 11px 16px;
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--gray-mid);
+            border-bottom: 1px solid var(--border);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            background: var(--gray-subtle);
+        }
+
+        .tbl td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--gray-subtle);
+            color: var(--black);
+            vertical-align: middle;
+        }
+
+        .tbl tr:last-child td { border-bottom: none; }
+        .tbl tbody tr:hover td { background: var(--bg); }
+
+        /* ── BADGES ── */
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 2px;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-success { background: #edf7ed; color: #2e7d32; border: 1px solid #c8e6c9; }
+        .badge-warn    { background: #fff8e1; color: #f57c00; border: 1px solid #ffe082; }
+        .badge-info    { background: #e8f0fe; color: #1a56db; border: 1px solid #c3d4fd; }
+        .badge-danger  { background: #fdecea; color: #b00020; border: 1px solid #f5c0c0; }
+
+        /* ── EMPTY STATE ── */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray-mid);
+            font-size: 14px;
+        }
+
+        /* ── MODAL ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.35);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.open { display: flex; }
+
+        .modal {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 2rem;
+            width: 400px;
+            max-width: 92vw;
+            animation: fadeUp 0.22s ease;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal h3 {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 1.25rem;
+            color: var(--black);
+        }
+
+        .modal-field { margin-bottom: 1rem; }
+
+        .modal-field label {
+            display: block;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-dark);
+            margin-bottom: 6px;
+        }
+
+        .modal-field input,
+        .modal-field select,
+        .modal-field textarea {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 10px 14px;
+            font-size: 13px;
+            font-family: 'DM Sans', sans-serif;
+            color: var(--black);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .modal-field select option { background: var(--white); }
+        .modal-field input:focus,
+        .modal-field select:focus,
+        .modal-field textarea:focus { border-color: var(--black); }
+        .modal-field textarea { resize: vertical; min-height: 70px; }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 1.25rem;
+        }
+
+        .btn-cancel {
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 9px 16px;
+            font-size: 11px;
+            font-family: 'DM Sans', sans-serif;
+            color: var(--gray-mid);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .btn-cancel:hover { border-color: var(--gray-mid); color: var(--black); }
+
+        .modal-error {
+            font-size: 12px;
+            color: var(--error);
+            margin-bottom: 0.5rem;
+            min-height: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <span class="sidebar-logo">NOIR</span>
+            <span class="sidebar-role">Panel Admin</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <p class="nav-section">Gestión</p>
+
+            <a class="nav-item active" href="#" onclick="switchTab('productos', this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/>
+                    <line x1="7" y1="7" x2="7.01" y2="7"/>
+                </svg>
+                Productos
+            </a>
+
+            <a class="nav-item" href="#" onclick="switchTab('pedidos', this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+                </svg>
+                Pedidos
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="btn-logout" onclick="cerrarSesion()">Cerrar sesión</button>
+        </div>
+    </aside>
+
+    <!-- ── MAIN ── -->
+    <main class="main">
+        <div class="topbar">
+            <span class="topbar-title" id="topbarTitle">Productos</span>
+            <span class="topbar-admin" id="topbarAdmin"></span>
+        </div>
+
+        <div class="content">
+
+            <!-- SECCIÓN PRODUCTOS -->
+            <div class="section active" id="secProductos">
+                <div class="section-header">
+                    <h2>Catálogo de productos</h2>
+                    <button class="btn-primary" onclick="abrirModal()">+ Agregar producto</button>
+                </div>
+                <div class="tbl-wrap">
+                    <table class="tbl">
+                        <thead>
+                            <tr>
+                                <th style="width:35%">Nombre</th>
+                                <th style="width:18%">Precio</th>
+                                <th style="width:20%">Categoría</th>
+                                <th style="width:27%">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyProductos"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- SECCIÓN PEDIDOS -->
+            <div class="section" id="secPedidos">
+                <div class="section-header">
+                    <h2>Pedidos recientes</h2>
+                </div>
+                <div class="tbl-wrap">
+                    <table class="tbl">
+                        <thead>
+                            <tr>
+                                <th style="width:14%">ID</th>
+                                <th style="width:28%">Cliente</th>
+                                <th style="width:18%">Total</th>
+                                <th style="width:20%">Estado</th>
+                                <th style="width:20%">Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyPedidos"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ── MODAL PRODUCTO ── -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <h3 id="modalTitle">Agregar producto</h3>
+            <p class="modal-error" id="modalError"></p>
+
+            <div class="modal-field">
+                <label>Nombre</label>
+                <input type="text" id="mNombre" placeholder="Ej: Blazer sastre negro">
+            </div>
+            <div class="modal-field">
+                <label>Precio (COP)</label>
+                <input type="number" id="mPrecio" placeholder="Ej: 189000" min="0">
+            </div>
+            <div class="modal-field">
+                <label>Categoría</label>
+                <select id="mCategoria">
+                    <option value="">Selecciona...</option>
+                    <option>Camisetas</option>
+                    <option>Pantalones</option>
+                    <option>Vestidos</option>
+                    <option>Chaquetas</option>
+                    <option>Accesorios</option>
+                    <option>Calzado</option>
+                </select>
+            </div>
+            <div class="modal-field">
+                <label>Descripción (opcional)</label>
+                <textarea id="mDesc" placeholder="Breve descripción del producto..."></textarea>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+                <button class="btn-primary" onclick="guardarProducto()">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago | NOIR</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .pago-section {
+            min-height: 100vh;
+            background: #f3f3f3;
+            padding: 140px 70px 80px;
+        }
+
+        .pago-title {
+            text-align: center;
+            font-size: 56px;
+            font-style: italic;
+            margin-bottom: 50px;
+            color: #111;
+        }
+
+        .pago-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 40px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* ---- FORMULARIO ---- */
+        .pago-form-box {
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+        }
+
+        .pago-form-box h3 {
+            font-size: 26px;
+            font-style: italic;
+            margin-bottom: 24px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #eee;
+            color: #111;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 18px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 14px 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 17px;
+            font-family: 'Cormorant Garamond', serif;
+            background: #fafafa;
+            color: #111;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #111;
+        }
+
+        .pago-seccion-titulo {
+            font-size: 20px;
+            font-style: italic;
+            color: #111;
+            margin: 28px 0 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pago-seccion-titulo::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+
+        /* Métodos de pago */
+        .metodos-pago {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .metodo-btn {
+            flex: 1;
+            padding: 14px;
+            border: 1.5px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #555;
+        }
+
+        .metodo-btn.active {
+            border-color: #111;
+            background: #111;
+            color: white;
+        }
+
+        /* ---- RESUMEN ---- */
+        .pago-resumen {
+            background: white;
+            border-radius: 8px;
+            padding: 32px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+            align-self: start;
+            position: sticky;
+            top: 120px;
+        }
+
+        .pago-resumen h3 {
+            font-size: 26px;
+            font-style: italic;
+            margin-bottom: 24px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .resumen-items {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .resumen-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 17px;
+        }
+
+        .resumen-item span:first-child {
+            color: #555;
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .resumen-item span:last-child {
+            font-weight: 600;
+            color: #111;
+        }
+
+        .resumen-divider {
+            height: 1px;
+            background: #eee;
+            margin: 16px 0;
+        }
+
+        .resumen-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 28px;
+        }
+
+        .btn-pagar {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background: #111;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-pagar:hover {
+            background: #333;
+        }
+
+        .pago-seguro {
+            text-align: center;
+            margin-top: 14px;
+            font-size: 14px;
+            color: #aaa;
+            letter-spacing: 1px;
+        }
+
+        /* Confirmación */
+        .pago-confirmacion {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .pago-confirmacion .check {
+            font-size: 70px;
+            margin-bottom: 20px;
+        }
+
+        .pago-confirmacion h2 {
+            font-size: 44px;
+            font-style: italic;
+            margin-bottom: 14px;
+        }
+
+        .pago-confirmacion p {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .pago-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pago-resumen {
+                position: static;
+            }
+
+            .pago-section {
+                padding: 120px 20px 60px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo">Noir</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="catalogo.html">Catálogo</a></li>
+                <li><a href="carrito.html">Carrito</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="pago-section">
+        <h1 class="pago-title">Finalizar Compra</h1>
+
+        <div class="pago-grid" id="pagoGrid">
+
+            <!-- FORMULARIO -->
+            <div class="pago-form-box">
+
+                <h3>Información de envío</h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" id="pagoNombre" placeholder="Ej. Juan">
+                    </div>
+                    <div class="form-group">
+                        <label>Apellido</label>
+                        <input type="text" id="pagoApellido" placeholder="Ej. Pérez">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Correo electrónico</label>
+                    <input type="email" id="pagoCorreo" placeholder="correo@ejemplo.com">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Ciudad</label>
+                        <input type="text" id="pagoCiudad" placeholder="Ej. Bogotá">
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <input type="tel" id="pagoTelefono" placeholder="Ej. 300 000 0000">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Dirección</label>
+                    <input type="text" id="pagoDireccion" placeholder="Calle, número, apartamento">
+                </div>
+
+                <!-- MÉTODO DE PAGO -->
+                <p class="pago-seccion-titulo">Método de pago</p>
+
+                <div class="metodos-pago">
+                    <button class="metodo-btn active" onclick="selectMetodo(this, 'tarjeta')"> Tarjeta</button>
+                    <button class="metodo-btn" onclick="selectMetodo(this, 'efectivo')"> Efectivo</button>
+                    <button class="metodo-btn" onclick="selectMetodo(this, 'transferencia')"> Transferencia</button>
+                </div>
+
+                <!-- Campos tarjeta -->
+                <div id="camposTarjeta">
+                    <div class="form-group">
+                        <label>Número de tarjeta</label>
+                        <input type="text" id="pagoTarjeta" placeholder="0000 0000 0000 0000" maxlength="19">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Vencimiento</label>
+                            <input type="text" id="pagoVencimiento" placeholder="MM/AA" maxlength="5">
+                        </div>
+                        <div class="form-group">
+                            <label>CVV</label>
+                            <input type="text" id="pagoCVV" placeholder="123" maxlength="3">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mensaje efectivo/transferencia -->
+                <div id="camposOtroPago" style="display:none;">
+                    <p id="instruccionesPago" style="font-size:17px; color:#555; line-height:1.7; padding: 16px; background:#f7f7f7; border-radius:4px;"></p>
+                </div>
+
+                <p id="pagoError" style="color:red; font-size:16px; margin-top:10px;"></p>
+
+            </div>
+
+            <!-- RESUMEN -->
+            <div class="pago-resumen">
+                <h3>Resumen</h3>
+                <div class="resumen-items" id="resumenItems"></div>
+                <div class="resumen-divider"></div>
+                <div class="resumen-total">
+                    <span>Total</span>
+                    <span id="resumenTotal">$0</span>
+                </div>
+                <button class="btn-pagar" onclick="procesarPago()">Confirmar pedido</button>
+                <p class="pago-seguro"> Pago seguro — tus datos están protegidos</p>
+            </div>
+
+        </div>
+
+        <!-- CONFIRMACIÓN -->
+        <div class="pago-confirmacion" id="pagoConfirmacion">
+            <div class="check"></div>
+            <h2>¡Pedido confirmado!</h2>
+            <p>Gracias por tu compra. Recibirás un correo con los detalles de tu pedido.</p>
+            <a href="index.html" class="btn-detail-cart" style="display:inline-block; padding:16px 40px; background:#111; color:white; border-radius:4px; font-size:17px; letter-spacing:2px; text-transform:uppercase;">
+                Volver al inicio
+            </a>
+        </div>
+
+    </section>
+
+    <script src="js/pago.js"></script>
+
+</body>
+</html>

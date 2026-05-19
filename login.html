@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | NOIR</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <section class="form-section">
+        <div class="form-container" style="position: relative;">
+
+            <a href="#" onclick="abrirAdminModal()" style="position: absolute; top: 15px; right: 20px; font-size: 11px; color: #888; text-decoration: none; letter-spacing: 1px; text-transform: uppercase; font-family: sans-serif;">
+                Admin
+            </a>
+
+            <h1 class="form-logo">NOIR</h1>
+            <h2>Iniciar Sesión</h2>
+
+            <form id="loginForm">
+                <input type="email" id="loginCorreo" placeholder="Correo electrónico" required>
+                <input type="password" id="loginPassword" placeholder="Contraseña" required>
+                <button type="submit">Ingresar</button>
+            </form>
+
+            <p id="loginMensaje" style="text-align: center; margin-top: 10px; font-size: 14px; font-family: sans-serif;"></p>
+
+            <p class="extra-link">
+                <a href="#" id="btnOlvidePassword">¿Olvidaste tu contraseña?</a>
+            </p>
+
+            <p class="extra-link">
+                ¿No tienes cuenta? <a href="registro.html">Regístrate</a>
+            </p>
+
+        </div>
+    </section>
+
+    <div id="adminModalOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:1000; align-items:center; justify-content:center;">
+        <div style="background:#fff; border:1px solid #d4d4d0; border-radius:4px; padding:2.5rem 2rem; width:380px; max-width:92vw; font-family: sans-serif;">
+            <div style="text-align:center; margin-bottom:1.75rem;">
+                <span style="font-family:'Cormorant Garamond',serif; font-size:36px; font-weight:700; letter-spacing:8px; color:#111;">NOIR</span>
+                <span style="display:block; font-size:10px; letter-spacing:3px; color:#888; text-transform:uppercase; margin-top:4px;">Panel Administrativo</span>
+            </div>
+
+            <div style="margin-bottom:1rem;">
+                <label style="display:block; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:#444; margin-bottom:6px;">Correo</label>
+                <input type="email" id="adminModalCorreo" placeholder="admin@noir.com" style="width:100%; background:#f4f4f2; border:1px solid #d4d4d0; border-radius:2px; padding:11px 14px; font-size:14px; color:#111; outline:none;">
+            </div>
+
+            <div style="margin-bottom:1.25rem;">
+                <label style="display:block; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:#444; margin-bottom:6px;">Contraseña</label>
+                <input type="password" id="adminModalPassword" placeholder="••••••••" style="width:100%; background:#f4f4f2; border:1px solid #d4d4d0; border-radius:2px; padding:11px 14px; font-size:14px; color:#111; outline:none;">
+            </div>
+
+            <button onclick="procesarAdminLogin()" style="width:100%; background:#111; color:#fff; border:none; border-radius:2px; padding:13px; font-size:11px; font-weight:500; letter-spacing:3px; text-transform:uppercase; cursor:pointer;">
+                Ingresar como Admin
+            </button>
+
+            <p id="adminModalError" style="font-size:12px; color:#b00020; text-align:center; margin-top:.75rem; min-height:18px;"></p>
+
+            <a href="#" onclick="cerrarAdminModal()" style="display:block; text-align:center; font-size:12px; color:#888; text-decoration:none; margin-top: 15px;">Cancelar</a>
+        </div>
+    </div>
+
+    <script>
+        // --- LÓGICA LOGIN NORMAL ---
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const emailInput = document.getElementById('loginCorreo').value.trim();
+            const passwordInput = document.getElementById('loginPassword').value.trim();
+            const mensaje = document.getElementById('loginMensaje');
+
+            try {
+                const res = await fetch('http://localhost:3000/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    // IMPORTANTE: Enviamos la clave "email" para que el Backend la encuentre
+                    body: JSON.stringify({ email: emailInput, password: passwordInput })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    localStorage.setItem('usuarioId', data.usuario.id);
+                    localStorage.setItem('usuarioRol', data.usuario.rol);
+                    localStorage.setItem('usuarioNombre', data.usuario.nombre);
+
+                    mensaje.style.color = "green";
+                    mensaje.textContent = "¡Bienvenido, " + data.usuario.nombre + "!";
+                    
+                    setTimeout(() => {
+                        window.location.href = (data.usuario.rol === 'admin') ? 'admin.html' : 'catalogo.html';
+                    }, 1200);
+                } else {
+                    mensaje.style.color = "red";
+                    mensaje.textContent = data.error || "Datos incorrectos";
+                }
+            } catch (err) {
+                mensaje.style.color = "red";
+                mensaje.textContent = "Error: El servidor no está respondiendo.";
+            }
+        });
+
+        // --- LÓGICA MODAL ADMIN ---
+        function abrirAdminModal() { document.getElementById('adminModalOverlay').style.display = 'flex'; }
+        function cerrarAdminModal() { document.getElementById('adminModalOverlay').style.display = 'none'; }
+
+        async function procesarAdminLogin() {
+            const email = document.getElementById('adminModalCorreo').value.trim();
+            const password = document.getElementById('adminModalPassword').value.trim();
+            const errorTxt = document.getElementById('adminModalError');
+
+            try {
+                const res = await fetch('http://localhost:3000/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, password: password })
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.usuario.rol === 'admin') {
+                    localStorage.setItem('usuarioId', data.usuario.id);
+                    localStorage.setItem('usuarioRol', data.usuario.rol);
+                    window.location.href = 'admin.html';
+                } else {
+                    errorTxt.textContent = 'Acceso denegado. Se requiere cuenta de admin.';
+                }
+            } catch (err) {
+                errorTxt.textContent = 'Error de conexión.';
+            }
+        }
+    </script>
+</body>
+</html>

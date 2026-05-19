@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | NOIR</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #f4f4f2;
+            --white: #ffffff;
+            --black: #111111;
+            --gray-dark: #444444;
+            --gray-mid: #888888;
+            --gray-light: #cccccc;
+            --gray-subtle: #e8e8e6;
+            --border: #d4d4d0;
+            --error: #b00020;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--black);
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 420px;
+            padding: 2rem;
+            animation: fadeUp 0.5s ease both;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .brand-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 52px;
+            font-weight: 700;
+            letter-spacing: 12px;
+            color: var(--black);
+            display: block;
+            line-height: 1;
+        }
+
+        .brand-sub {
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: var(--gray-mid);
+            text-transform: uppercase;
+            margin-top: 8px;
+            display: block;
+        }
+
+        .card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 2.5rem 2rem;
+        }
+
+        .card-title {
+            font-size: 11px;
+            color: var(--gray-mid);
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .field { margin-bottom: 1.25rem; }
+
+        .field label {
+            display: block;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-dark);
+            margin-bottom: 6px;
+        }
+
+        .field input {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 11px 14px;
+            font-size: 14px;
+            font-family: 'DM Sans', sans-serif;
+            color: var(--black);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .field input::placeholder { color: var(--gray-light); }
+        .field input:focus { border-color: var(--black); }
+
+        .btn-login {
+            width: 100%;
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            border-radius: 2px;
+            padding: 13px;
+            font-size: 11px;
+            font-weight: 500;
+            font-family: 'DM Sans', sans-serif;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn-login:hover { background: var(--gray-dark); }
+        .btn-login:active { transform: scale(0.98); }
+
+        .error-msg {
+            font-size: 12px;
+            color: var(--error);
+            text-align: center;
+            margin-top: 1rem;
+            min-height: 18px;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid var(--gray-subtle);
+            margin: 1.5rem 0;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            font-size: 12px;
+            color: var(--gray-mid);
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover { color: var(--black); }
+    </style>
+</head>
+<body>
+
+    <div class="login-wrapper">
+        <div class="brand">
+            <span class="brand-logo">NOIR</span>
+            <span class="brand-sub">Panel Administrativo</span>
+        </div>
+
+        <div class="card">
+            <p class="card-title">Acceso restringido</p>
+
+            <form id="adminLoginForm">
+                <div class="field">
+                    <label for="adminCorreo">Correo</label>
+                    <input type="email" id="adminCorreo" placeholder="admin@noir.com" autocomplete="off">
+                </div>
+                <div class="field">
+                    <label for="adminPassword">Contraseña</label>
+                    <input type="password" id="adminPassword" placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn-login">Ingresar</button>
+                <p class="error-msg" id="adminError"></p>
+            </form>
+
+            <hr class="divider">
+            <a href="index.html" class="back-link">← Volver a la tienda</a>
+        </div>
+    </div>
+
+    <script>
+        const form    = document.getElementById("adminLoginForm");
+        const errorEl = document.getElementById("adminError");
+
+        form.addEventListener("submit", async function(e) {
+            e.preventDefault();
+            errorEl.textContent = "";
+
+            const email    = document.getElementById("adminCorreo").value.trim();
+            const password = document.getElementById("adminPassword").value.trim();
+
+            if (!email)    { errorEl.textContent = "Ingresa tu correo."; return; }
+            if (!password) { errorEl.textContent = "Ingresa tu contraseña."; return; }
+
+            try {
+                const res = await fetch('http://localhost:3000/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.usuario.rol === 'admin') {
+                    localStorage.setItem('usuarioId',     data.usuario.id);
+                    localStorage.setItem('usuarioRol',    data.usuario.rol);
+                    localStorage.setItem('usuarioNombre', data.usuario.nombre);
+                    window.location.href = "admin.html";
+                } else if (res.ok && data.usuario.rol !== 'admin') {
+                    errorEl.textContent = "Acceso denegado. No tienes permisos de administrador.";
+                } else {
+                    errorEl.textContent = data.error || "Credenciales incorrectas.";
+                }
+
+            } catch (err) {
+                errorEl.textContent = "Error: El servidor no está respondiendo.";
+            }
+        });
+    </script>
+
+</body>
+</html>

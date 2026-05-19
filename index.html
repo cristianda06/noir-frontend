@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOIR</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo">Noir</div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Inicio</a></li>
+                <li><a href="catalogo.html">Catálogo</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="carrito.html">Carrito</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>NOIR</h1>
+            <p>Moda elegante y moderna</p>
+            <a href="#productos" class="btn">Comprar ahora</a>
+        </div>
+    </section>
+
+    <section class="categories">
+        <h2 class="section-title">Categorías</h2>
+        <div class="categories-container">
+
+            <a href="catalogo.html?categoria=camisetas" class="category-card">
+                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1170&auto=format&fit=crop" alt="Hombre">
+                <h3>Hombre</h3>
+            </a>
+
+            <a href="catalogo.html?categoria=hoodies" class="category-card">
+                <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80&w=1160&auto=format&fit=crop" alt="Mujer">
+                <h3>Mujer</h3>
+            </a>
+
+            <a href="catalogo.html?categoria=accesorios" class="category-card">
+                <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=1160&auto=format&fit=crop" alt="Accesorios">
+                <h3>Accesorios</h3>
+            </a>
+
+        </div>
+    </section>
+
+    <section class="products" id="productos">
+        <h2 class="section-title">Productos Destacados</h2>
+        <div class="products-container"></div>
+    </section>
+
+    <footer class="footer">
+        <h2>NOIR</h2>
+        <p>Moda premium urbana</p>
+        <p>© 2026 <em>Noir</em></p>
+
+        <a href="admin-login.html" id="linkAdmin" style="display:none; font-size:11px; color:#6b6b6b; text-decoration:none; letter-spacing:1px; margin-top:8px;">
+            Admin
+        </a>
+    </footer>
+
+    <script src="js/app.js"></script>
+
+    <div id="adminModalOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:1000; align-items:center; justify-content:center;">
+        <div style="background:#fff; border:1px solid #d4d4d0; border-radius:4px; padding:2.5rem 2rem; width:380px; max-width:92vw; font-family:'DM Sans',sans-serif;">
+
+            <div style="text-align:center; margin-bottom:1.75rem;">
+                <span style="font-family:'Cormorant Garamond',serif; font-size:36px; font-weight:700; letter-spacing:8px; color:#111;">NOIR</span>
+                <span style="display:block; font-size:10px; letter-spacing:3px; color:#888; text-transform:uppercase; margin-top:4px;">Panel Administrativo</span>
+            </div>
+
+            <p style="font-size:10px; letter-spacing:2px; color:#888; text-transform:uppercase; text-align:center; margin-bottom:1.5rem;">Acceso restringido</p>
+
+            <div style="margin-bottom:1rem;">
+                <label style="display:block; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:#444; margin-bottom:6px;">Correo</label>
+                <input type="email" id="adminModalCorreo" placeholder="admin@noir.com"
+                    style="width:100%; background:#f4f4f2; border:1px solid #d4d4d0; border-radius:2px; padding:11px 14px; font-size:14px; color:#111; outline:none; font-family:'DM Sans',sans-serif;">
+            </div>
+
+            <div style="margin-bottom:1.25rem;">
+                <label style="display:block; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:#444; margin-bottom:6px;">Contraseña</label>
+                <input type="password" id="adminModalPassword" placeholder="••••••••"
+                    style="width:100%; background:#f4f4f2; border:1px solid #d4d4d0; border-radius:2px; padding:11px 14px; font-size:14px; color:#111; outline:none; font-family:'DM Sans',sans-serif;">
+            </div>
+
+            <button onclick="procesarAdminLogin()"
+                style="width:100%; background:#111; color:#fff; border:none; border-radius:2px; padding:13px; font-size:11px; font-weight:500; font-family:'DM Sans',sans-serif; letter-spacing:3px; text-transform:uppercase; cursor:pointer;">
+                Ingresar
+            </button>
+
+            <p id="adminModalError" style="font-size:12px; color:#b00020; text-align:center; margin-top:.75rem; min-height:18px;"></p>
+
+            <hr style="border:none; border-top:1px solid #e8e8e6; margin:1.25rem 0;">
+
+            <div style="background:#f4f4f2; border:1px solid #d4d4d0; border-radius:2px; padding:12px 14px;">
+                <p style="font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#888; margin-bottom:6px;">Credenciales de prueba</p>
+                <p style="font-size:12px; color:#444; margin-bottom:3px;">Correo: <strong style="color:#111;">admin@noir.com</strong></p>
+                <p style="font-size:12px; color:#444;">Contraseña: <strong style="color:#111;">noir2024</strong></p>
+            </div>
+
+            <hr style="border:none; border-top:1px solid #e8e8e6; margin:1.25rem 0;">
+            <a href="#" onclick="cerrarAdminModal()" style="display:block; text-align:center; font-size:12px; color:#888; text-decoration:none;">Cancelar</a>
+        </div>
+    </div>
+
+    <a href="carrito.html" class="btn-flotante-carrito">🛒</a>
+
+</body>
+</html>

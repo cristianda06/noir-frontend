@@ -1,0 +1,22 @@
+const products = [
+    { id: 1, name: "Jean Classic", category: "pantalones", price: 120000, image: "img/pantalones/jean.jpg" },
+    { id: 2, name: "Jean Urban", category: "pantalones", price: 130000, image: "img/pantalones/jean2.jpg" },
+    { id: 3, name: "Jean Oversize", category: "pantalones", price: 135000, image: "img/pantalones/jean3.jpg" },
+    { id: 4, name: "Pantalón Azul", category: "pantalones", price: 125000, image: "img/pantalones/pantalon-azul.jpg" },
+    { id: 5, name: "Pantalón Blanco", category: "pantalones", price: 128000, image: "img/pantalones/pantalon-blanco.jpg" },
+    { id: 6, name: "Pantalón Negro", category: "pantalones", price: 132000, image: "img/pantalones/pantalon-negro.jpg" },
+    { id: 7, name: "Blusa Minimal", category: "camisetas", price: 70000, image: "img/camisetas/blusa.jpg" },
+    { id: 8, name: "Blusa Urban", category: "camisetas", price: 75000, image: "img/camisetas/blusa2.jpg" },
+    { id: 9, name: "Camisa Premium", category: "camisetas", price: 80000, image: "img/camisetas/camisa.jpg" },
+    { id: 10, name: "Camiseta Blanca", category: "camisetas", price: 70000, image: "img/camisetas/camiseta-blanca.jpg" },
+    { id: 11, name: "Camiseta Negra", category: "camisetas", price: 70000, image: "img/camisetas/camiseta-negra.jpg" },
+    { id: 12, name: "Camiseta Oversize", category: "camisetas", price: 78000, image: "img/camisetas/camiseta.jpg" },
+    { id: 13, name: "Camiseta Streetwear", category: "camisetas", price: 79000, image: "img/camisetas/camiseta2.jpg" },
+    { id: 14, name: "Hoodie Amarillo", category: "hoodies", price: 150000, image: "img/hoodies/hoodie-amarillo.jpg" },
+    { id: 15, name: "Hoodie Azul", category: "hoodies", price: 150000, image: "img/hoodies/hoodie-azul.jpg" },
+    { id: 16, name: "Hoodie Gris", category: "hoodies", price: 155000, image: "img/hoodies/hoodie-gris.jpg" },
+    { id: 17, name: "Hoodie Negro", category: "hoodies", price: 160000, image: "img/hoodies/hoodie-negro.jpg" },
+    { id: 18, name: "Saco Oversize", category: "hoodies", price: 145000, image: "img/hoodies/saco.jpg" },
+    { id: 19, name: "Accesorios Urban", category: "accesorios", price: 50000, image: "img/accesorios/accesorios.jpg" },
+    { id: 20, name: "Anillos Noir", category: "accesorios", price: 45000, image: "img/accesorios/anillos.jpg" }
+];

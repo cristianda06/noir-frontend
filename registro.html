@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro | NOIR</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <section class="form-section">
+        <div class="form-container">
+
+            <h1 class="form-logo">NOIR</h1>
+            <h2>Crear Cuenta</h2>
+
+            <form id="registroForm">
+                <input type="text"     id="nombre"    placeholder="Nombre completo" required>
+                <input type="email"    id="correo"    placeholder="Correo electrónico" required>
+                <input type="password" id="password"  placeholder="Contraseña" required>
+                <input type="password" id="confirmar" placeholder="Confirmar contraseña" required>
+                <button type="submit">Registrarse</button>
+            </form>
+
+            <p id="mensaje" style="text-align: center; margin-top: 10px; font-size: 14px;"></p>
+
+            <p class="extra-link">
+                ¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a>
+            </p>
+
+        </div>
+    </section>
+
+    <script>
+        document.getElementById('registroForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const mensajeTxt = document.getElementById('mensaje');
+            const nombre = document.getElementById('nombre').value;
+            const email = document.getElementById('correo').value;
+            const password = document.getElementById('password').value;
+            const confirmar = document.getElementById('confirmar').value;
+
+            // Validación rápida de contraseña coincidente
+            if (password !== confirmar) {
+                mensajeTxt.style.color = "red";
+                mensajeTxt.textContent = "Las contraseñas no coinciden.";
+                return;
+            }
+
+            try {
+                // LLAMADA AL BACKEND
+                const response = await fetch('http://localhost:3000/usuarios', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nombre, email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    mensajeTxt.style.color = "green";
+                    mensajeTxt.textContent = "¡Registro exitoso! Redirigiendo...";
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    mensajeTxt.style.color = "red";
+                    mensajeTxt.textContent = data.error || "Error al registrar.";
+                }
+            } catch (error) {
+                mensajeTxt.style.color = "red";
+                mensajeTxt.textContent = "Error: El servidor no responde.";
+                console.error(error);
+            }
+        });
+    </script>
+
+</body>
+</html>
