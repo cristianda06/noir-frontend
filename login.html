@@ -92,7 +92,7 @@
                     mensaje.style.color = "green";
                     mensaje.textContent = "¡Bienvenido, " + data.usuario.nombre + "!";
 
-                    sessionStorage.setItem('recienLogueado', 'true'); // ✅ activa el banner
+                    sessionStorage.setItem('recienLogueado', 'true'); // activa el banner
 
                     setTimeout(() => {
                         window.location.href = (data.usuario.rol === 'admin') ? 'admin.html' : 'catalogo.html';
