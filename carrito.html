@@ -18,13 +18,12 @@
                 <li><a href="index.html">Inicio</a></li>
                 <li><a href="catalogo.html">Catálogo</a></li>
                 <li><a href="carrito.html">Carrito</a></li>
-                <li><a href="login.html">Login</a></li>
+                <li id="navAuth"><a href="login.html">Login</a></li>
             </ul>
         </nav>
     </header>
 
     <section class="cart-section">
-    
         <h1 class="cart-title">
             <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"
                 fill="none" stroke="currentColor" stroke-width="1.5"
@@ -43,6 +42,23 @@
     </section>
 
     <script src="js/carrito.js"></script>
+
+    <script>
+        const usuarioRol    = localStorage.getItem('usuarioRol');
+        const usuarioNombre = localStorage.getItem('usuarioNombre');
+        const navAuth       = document.getElementById('navAuth');
+
+        if (usuarioRol) {
+            navAuth.innerHTML = `<a href="#" onclick="cerrarSesion()">Cerrar sesión</a>`;
+        }
+
+        function cerrarSesion() {
+            localStorage.removeItem('usuarioId');
+            localStorage.removeItem('usuarioRol');
+            localStorage.removeItem('usuarioNombre');
+            window.location.href = 'login.html';
+        }
+    </script>
 
 </body>
 </html>

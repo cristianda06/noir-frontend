@@ -10,61 +10,44 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* ── TOAST BIENVENIDA ── */
-        .toast-bienvenida {
-            position: fixed;
-            top: 80px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-20px);
-            background: #111;
-            color: #fff;
-            padding: 12px 28px;
-            border-radius: 2px;
+        .bienvenida-logo {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 15px;
+            font-size: 18px;
             letter-spacing: 2px;
-            white-space: nowrap;
+            color: #fff;
             opacity: 0;
-            z-index: 999;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.18);
-            transition: opacity 0.5s ease, transform 0.5s ease;
+            transform: translateY(10px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            white-space: nowrap;
             pointer-events: none;
         }
 
-        .toast-bienvenida.visible {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .toast-bienvenida.oculto {
-            opacity: 0;
-            transform: translateX(-50%) translateY(-20px);
-        }
-
-        /* ── NOMBRE EN NAVBAR ── */
-        .nav-usuario {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .nav-usuario-nombre {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 14px;
-            letter-spacing: 1.5px;
-            color: #fff;
+        .bienvenida-logo.visible {
             opacity: 0.85;
+            transform: translateY(0);
+        }
+
+        .bienvenida-logo.oculto {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        .logo-area {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 16px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Toast bienvenida -->
-    <div class="toast-bienvenida" id="toastBienvenida"></div>
-
     <header class="header">
         <nav class="navbar">
-            <div class="logo">Noir</div>
+            <div class="logo-area">
+                <div class="logo">Noir</div>
+                <span class="bienvenida-logo" id="bienvenidaLogo"></span>
+            </div>
             <ul class="nav-links">
                 <li><a href="index.html">Inicio</a></li>
                 <li><a href="catalogo.html">Catálogo</a></li>
@@ -98,35 +81,25 @@
     <a href="carrito.html" class="btn-flotante-carrito">🛒</a>
 
     <script>
-        const usuarioRol    = localStorage.getItem('usuarioRol');
-        const usuarioNombre = localStorage.getItem('usuarioNombre');
-        const navAuth       = document.getElementById('navAuth');
-        const toast         = document.getElementById('toastBienvenida');
+        const usuarioRol     = localStorage.getItem('usuarioRol');
+        const usuarioNombre  = localStorage.getItem('usuarioNombre');
+        const navAuth        = document.getElementById('navAuth');
+        const bienvenidaLogo = document.getElementById('bienvenidaLogo');
 
         if (usuarioRol) {
-            // Navbar con nombre + cerrar sesión
-            navAuth.innerHTML = `
-                <div class="nav-usuario">
-                    <span class="nav-usuario-nombre">${usuarioNombre}</span>
-                    <a href="#" onclick="cerrarSesion()">Cerrar sesión</a>
-                </div>
-            `;
+            navAuth.innerHTML = `<a href="#" onclick="cerrarSesion()">Cerrar sesión</a>`;
 
-            // Toast solo si viene del login
             const recienLogueado = sessionStorage.getItem('recienLogueado');
             if (recienLogueado) {
                 sessionStorage.removeItem('recienLogueado');
+                bienvenidaLogo.textContent = `Bienvenid@ ${usuarioNombre}`;
 
-                toast.textContent = `Bienvenid@ , ${usuarioNombre}`;
+                setTimeout(() => bienvenidaLogo.classList.add('visible'), 100);
 
-                // Aparecer con animación
-                setTimeout(() => toast.classList.add('visible'), 100);
-
-                // Desaparecer después de 5 segundos
                 setTimeout(() => {
-                    toast.classList.remove('visible');
-                    toast.classList.add('oculto');
-                }, 5000);
+                    bienvenidaLogo.classList.remove('visible');
+                    bienvenidaLogo.classList.add('oculto');
+                }, 10000);
             }
         }
 
