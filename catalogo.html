@@ -8,9 +8,34 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        .banner-bienvenida {
+            background: #111;
+            color: #fff;
+            text-align: center;
+            padding: 12px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 16px;
+            letter-spacing: 2px;
+            position: relative;
+            transition: opacity 0.8s ease, max-height 0.8s ease;
+            max-height: 60px;
+            overflow: hidden;
+        }
+
+        .banner-bienvenida.oculto {
+            opacity: 0;
+            max-height: 0;
+            padding: 0;
+        }
+    </style>
 </head>
 <body>
 
+    <div class="banner-bienvenida" id="bannerBienvenida" style="display:none;">
+        ¡Bienvenid@ <span id="bannerNombre"></span> a NOIR!
+    </div>
 
     <header class="header">
         <nav class="navbar">
@@ -19,22 +44,18 @@
                 <li><a href="index.html">Inicio</a></li>
                 <li><a href="catalogo.html">Catálogo</a></li>
                 <li><a href="carrito.html">Carrito</a></li>
-                <li><a href="login.html">Login</a></li>
+                <li id="navAuth"><a href="login.html">Login</a></li>
             </ul>
         </nav>
     </header>
 
-
     <a href="carrito.html" class="floating-cart"></a>
 
-
     <h1 class="title">NOIR STORE</h1>
-
 
     <div class="search-container">
         <input type="text" id="searchInput" placeholder="Buscar productos...">
     </div>
-
 
     <div class="filters">
         <button onclick="filterProducts('todos')">Todos</button>
@@ -44,15 +65,48 @@
         <button onclick="filterProducts('accesorios')">Accesorios</button>
     </div>
 
-
     <div id="products-container"></div>
-
 
     <script src="js/products.js"></script>
     <script src="js/catalogo.js"></script>
 
+    <a href="carrito.html" class="btn-flotante-carrito">🛒</a>
 
-<a href="carrito.html" class="btn-flotante-carrito">🛒</a>
+    <script>
+        const usuarioRol    = localStorage.getItem('usuarioRol');
+        const usuarioNombre = localStorage.getItem('usuarioNombre');
+        const navAuth       = document.getElementById('navAuth');
+        const banner        = document.getElementById('bannerBienvenida');
+        const bannerNombre  = document.getElementById('bannerNombre');
+
+        if (usuarioRol) {
+            // Actualizar navbar
+            navAuth.innerHTML = `
+                <span style="color:#fff; font-size:13px; margin-right:8px;">Hola, ${usuarioNombre}</span>
+                <a href="#" onclick="cerrarSesion()">Cerrar sesión</a>
+            `;
+
+            // Mostrar banner solo si viene del login
+            const recienLogueado = sessionStorage.getItem('recienLogueado');
+            if (recienLogueado) {
+                bannerNombre.textContent = usuarioNombre;
+                banner.style.display = 'block';
+                sessionStorage.removeItem('recienLogueado');
+
+                // Desaparece después de 3 segundos
+                setTimeout(() => {
+                    banner.classList.add('oculto');
+                }, 3000);
+            }
+        }
+
+        function cerrarSesion() {
+            localStorage.removeItem('usuarioId');
+            localStorage.removeItem('usuarioRol');
+            localStorage.removeItem('usuarioNombre');
+            window.location.href = 'login.html';
+        }
+    </script>
 
 </body>
 </html>
